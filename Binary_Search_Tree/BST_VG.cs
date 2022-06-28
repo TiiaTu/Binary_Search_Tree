@@ -18,4 +18,5 @@ namespace Binary_Search_Tree
 		// private int GetMaxDepth()
 		// private int GetMinDepth()
 	}
+
 }
