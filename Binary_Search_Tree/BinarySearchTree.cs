@@ -14,20 +14,45 @@ namespace Binary_Search_Tree
         public void Insert(T value) // loopa igenom 
             //är det tomt?
         {
-            var currentNode = 0;
+            var currentNode = Root;
 
-            //jämför 
+            //jämför value med node 
             //loopa
             //
             // om Root är tom, lägg till data
-            if (Root == null)
+            if (currentNode == null)
             {
-                Root = new Node<T>(value);
+                currentNode = new Node<T>(value);
             }
-            // om value är mindre än root --> leftchild
-            else if (Root.Data.CompareTo(value) > 0)
+            else
             {
-                Root.LeftChild = new Node<T>(value);
+                //jämför current node till värdet så att man vet vilken sida värdet ska läggas till
+                var comparedValue = currentNode.Data.CompareTo(value);
+
+                if (comparedValue > 0)
+                {
+                    currentNode.LeftChild = new Node<T>(value);
+                }
+                // om value är större än root --> rightchild
+                else if (comparedValue < 0)
+                {
+                    currentNode.RightChild = new Node<T>(value);
+                }
+
+                while (currentNode.LeftChild == null || currentNode.RightChild == null)
+                {
+                    
+                }
+                
+                //så länge leftChild || rightChild != null
+                
+            }
+
+
+            /*// om value är mindre än root --> leftchild
+            else if (currentNode.Data.CompareTo(value) > 0)
+            {
+                currentNode.LeftChild = new Node<T>(value);
             }
             // om value är större än root --> rightchild
             else if (Root.Data.CompareTo(value) < 0)
@@ -45,7 +70,7 @@ namespace Binary_Search_Tree
                 {
                     Root.RightChild = new Node<T>(value);
                 }
-            }
+            }*/
         }
 
         // Returns true if an object that is equal to value exists in the tree
