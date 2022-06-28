@@ -5,93 +5,124 @@ namespace Binary_Search_Tree
 
     public class BinarySearchTree<T> : BST_G<T>, BST_VG<T> where T : IComparable<T>
     {
-        private int count;
+        private int nodeCount;
         private Node<T>? Root = null;
 
-        // Remember: the most efficient tree is a balanced tree. A balanced tree has the same (or as close as possible to) amount of nodes on the left as on the right.
+        #region G methods
 
-        // Inserts a new value to the tree
-        public void Insert(T value) // loopa igenom 
-            //är det tomt?
+        /// <summary>
+        /// Inserts a new value to the tree
+        /// </summary>
+        /// <param name="value">The value that is added to the tree.</param>
+        public void Insert(T value)                        
         {
-            var currentNode = 0;
-
-            //jämför 
-            //loopa
-            //
-            // om Root är tom, lägg till data
             if (Root == null)
             {
                 Root = new Node<T>(value);
             }
-            // om value är mindre än root --> leftchild
-            else if (Root.Data.CompareTo(value) > 0)
+            else
             {
-                Root.LeftChild = new Node<T>(value);
-            }
-            // om value är större än root --> rightchild
-            else if (Root.Data.CompareTo(value) < 0)
-            {
-                Root.RightChild = new Node<T>(value);
-            }
-            else // (Root.Data.CompareTo(value) == 0)
-            {
-                // 
-                if(Root.LeftChild == null)
-                {
-                    Root.LeftChild = new Node<T>(value);
-                }
-                else if(Root.RightChild == null)
-                {
-                    Root.RightChild = new Node<T>(value);
-                }
+                Root = InsertDirection(Root, value);
+                nodeCount++;
             }
         }
 
-        // Returns true if an object that is equal to value exists in the tree
-        // Uses the IComparable<T> interface. x.CompareTo(y) == 0
+        /// <summary>
+        /// Recursive help method for Insert(value) that can be used to determine which side of the tree (and subtree) the value is added to.
+        /// </summary>
+        /// <param name="node">The current node.</param>
+        /// <param name="value">The value that is being added to the tree.</param>
+        /// <returns></returns>
+        private Node<T> InsertDirection(Node<T> node, T value)
+        {
+
+            //om första noden är tom, skapa en ny node
+            if (node == null)
+            {
+                node = new Node<T>(value);
+            }
+            else if (node.Data.CompareTo(value) > 0)
+            {
+                node.LeftChild = InsertDirection(node.LeftChild, value);
+                //nodeCount++;
+            }
+            else if (node.Data.CompareTo(value) < 0)
+            {
+                node.RightChild = InsertDirection(node.RightChild, value);
+                //nodeCount++;
+            }
+            else //node.Data.CompareTo(value) == 0
+            {
+                CheckChildren(node);
+                //nodeCount++;
+            }
+
+            return node;
+        }
+
+        //help method for the InsertDirection
+        private Node<T> CheckChildren(Node<T> node)
+        {
+            //om leftchild är null --> lägg värdet dit
+            //om right är null --> lägg till värdet dit
+            if (node.LeftChild == null) node = node.LeftChild;
+            else node = node.RightChild;
+
+            return node;
+        } //TODO: gör bättre
+
+        /// <summary>
+        /// Returns true if an object that is equal to value exists in the tree
+        /// </summary>
+        /// <param name="value">The value that is beeing searched from the tree.</param>
+        /// <returns></returns>
         public bool Exists(T value)
         {
-            // om rooten är tom
             if (Root == null)
                 return false;
 
-            // jämför med rooten så att man vet vilken sida man ska jämföra
             var node = Root;
-
-            int decideSide = Root.Data.CompareTo(value);
 
             while (node != null)
             {
-                if (node.LeftChild.Data.CompareTo(value) > 0)// om value är mindre än leftchild
+                if (node.Data.CompareTo(value) == 0)
+                {
+                    Console.WriteLine($"Number {value} exists in the tree");
+                    return true;
+                }
+                else if (node.Data.CompareTo(value) > 0)// om value är mindre än leftchild
                 {
                     node = node.LeftChild;
                 }
-                else if(node.RightChild.Data.CompareTo(value) < 0)
+                else //(decideSide < 0)
                 {
-
+                    node = node.RightChild;
                 }
-            }
-
-            while (node != null)
-            {
 
             }
+            Console.WriteLine($"Number {value} doesn't exist in the tree");
             return false;
         }
 
-        // Returns the number of objects currently in the tree
+        /// <summary>
+        /// Returns the number of objects currently in the tree
+        /// </summary>
+        /// <returns></returns>
         public int Count()
         {
             // när träden är tom
             if (Root == null)
                 return 0;
 
-            return count;
-
-            //returnera antalet nodes
+            Console.WriteLine($"The tree has {nodeCount} elements.");
+            return nodeCount;
         }
 
+
+
+        /// <summary>
+        /// Prints the binary tree in console
+        /// </summary>
         public void Print()
         {
             Queue<Node<T>?> nodes = new Queue<Node<T>?>();
@@ -139,8 +170,10 @@ namespace Binary_Search_Tree
             }
         }
 
-        // VG METODER----------------------------------
+        #endregion
 
+        #region VG methods
+        // VG METODER----------------------------------
 
         // Remove a value from the tree
         public void Remove(T value)
@@ -157,5 +190,7 @@ namespace Binary_Search_Tree
         // Methods that you may find useful:
         // private int GetMaxDepth()
         // private int GetMinDepth()
+
+        #endregion
     }
 }
