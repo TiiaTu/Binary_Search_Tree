@@ -3,18 +3,29 @@
 using Binary_Search_Tree;
 
 BinarySearchTree<int> tree = new BinarySearchTree<int>();
-tree.Insert(3);
-tree.Insert(5);
-tree.Insert(6);
-tree.Insert(2);
-tree.Insert(1);
-tree.Insert(4);
-tree.Insert(4);
-tree.Insert(8);
-tree.Insert(-4);
-tree.Print();
 
-//Console.WriteLine("The tree has {0} elements", tree.Count());
+int[] values = { 7, 5, 9, 10, -1, 8, 2 };
+
+foreach (int num in values)
+{
+    tree.Insert(num);
+}
+
+tree.Remove(2); // inga children
+tree.Remove(5); // en child
+tree.Remove(9); // två children
+
+tree.Print();
 tree.Count();
 
-tree.Exists(-1);
+Exists(9);
+
+void Exists(int num)
+{
+    if (tree.Exists(num))
+    {
+        Console.WriteLine($"Number {num} exists in the tree.");
+    }
+    else
+        Console.WriteLine($"Number {num} doesn not exist in the tree.");
+}

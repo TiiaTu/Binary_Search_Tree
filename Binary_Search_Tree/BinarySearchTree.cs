@@ -14,15 +14,18 @@ namespace Binary_Search_Tree
         /// Inserts a new value to the tree
         /// </summary>
         /// <param name="value">The value that is added to the tree.</param>
-        public void Insert(T value)                        
+        public void Insert(T value)
         {
+            if (Exists(value)) return; //ifall det blir dubletter
+
             if (Root == null)
             {
                 Root = new Node<T>(value);
+                nodeCount++;
             }
             else
             {
-                Root = InsertDirection(Root, value);
+                Root = InsertTo(Root, value);
                 nodeCount++;
             }
         }
@@ -33,7 +36,7 @@ namespace Binary_Search_Tree
         /// <param name="node">The current node.</param>
         /// <param name="value">The value that is being added to the tree.</param>
         /// <returns></returns>
-        private Node<T> InsertDirection(Node<T> node, T value)
+        private Node<T> InsertTo(Node<T> node, T value)
         {
 
             //om första noden är tom, skapa en ny node
@@ -43,18 +46,16 @@ namespace Binary_Search_Tree
             }
             else if (node.Data.CompareTo(value) > 0)
             {
-                node.LeftChild = InsertDirection(node.LeftChild, value);
-                //nodeCount++;
+                node.LeftChild = InsertTo(node.LeftChild, value);
             }
             else if (node.Data.CompareTo(value) < 0)
             {
-                node.RightChild = InsertDirection(node.RightChild, value);
-                //nodeCount++;
+                node.RightChild = InsertTo(node.RightChild, value);
             }
             else //node.Data.CompareTo(value) == 0
             {
                 CheckChildren(node);
-                //nodeCount++;
+
             }
 
             return node;
@@ -87,7 +88,6 @@ namespace Binary_Search_Tree
             {
                 if (node.Data.CompareTo(value) == 0)
                 {
-                    Console.WriteLine($"Number {value} exists in the tree");
                     return true;
                 }
                 else if (node.Data.CompareTo(value) > 0)// om value är mindre än leftchild
@@ -100,7 +100,6 @@ namespace Binary_Search_Tree
                 }
 
             }
-            Console.WriteLine($"Number {value} doesn't exist in the tree");
             return false;
         }
 
@@ -173,12 +172,66 @@ namespace Binary_Search_Tree
         #endregion
 
         #region VG methods
-        // VG METODER----------------------------------
 
         // Remove a value from the tree
         public void Remove(T value)
         {
+            if (Root == null)
+            {
+                Console.WriteLine("The tree is empty!");
+                return;
+            }
+            else
+            {
+                Root = RemoveFrom(Root, value);
+                nodeCount--;
+            }
+        }
 
+        private Node<T> RemoveFrom(Node<T> node, T value)
+        {
+            if (node.Data.CompareTo(value) > 0)
+            {
+                node.LeftChild = RemoveFrom(node.LeftChild, value);
+            }
+            else if (node.Data.CompareTo(value) < 0)
+            {
+                node.RightChild = RemoveFrom(node.RightChild, value);
+            }
+            else
+            {
+                // fall 1: inga children (leaf node)
+                if (node.LeftChild == null && node.RightChild == null)
+                {
+                    return node = null;
+                }
+
+                // fall 2: har en child (den andra måste isf vara null)
+                else if (node.LeftChild == null || node.RightChild == null)
+                {
+                    if (node.LeftChild == null) return node.RightChild;
+                    else return node.LeftChild;
+                }
+
+                // fall 3: har två children
+                else
+                {
+                    Node<T> temp = getMaxValue(node.LeftChild);
+                    node.Data = temp.Data;
+                    node.LeftChild = RemoveFrom(node.LeftChild, temp.Data);
+                }
+            }
+            return node;
+        }
+
+        //hämtar det högsta värdet på trädet
+        private Node<T> getMaxValue(Node<T> node)
+        {
+            while (node.RightChild != null)
+            { 
+                node = node.RightChild; 
+            }
+            return node;
         }
 
         // You need a method to balance the tree, whenever it is unbalanced. All methods that change the tree can cause it to become unbalanced.
