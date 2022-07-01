@@ -17,8 +17,17 @@ public class Node<T>
 	// 0 is best, but +1 and -1 is ok.
 	public int GetBalance()
 	{
-		int left = (LeftChild == null) ? 0 : LeftChild.GetBalance() + 1;
-		int right = (RightChild == null) ? 0 : RightChild.GetBalance() + 1;
-		return Math.Abs(right - left);
+		int left = (LeftChild == null) ? 0 : LeftChild.GetDepth(0) + 1;
+		int right = (RightChild == null) ? 0 : RightChild.GetDepth(0) + 1;
+		return right - left;
 	}
+
+    
+    // en rekursiv metod som räknar djupet på left och right subträd och returnerar den som har högre (dvs. den som är djupare)
+    private int GetDepth(int depth)
+    {
+        int left = (LeftChild == null) ? depth : LeftChild.GetDepth(depth+ 1);
+        int right = (RightChild == null) ? depth : RightChild.GetDepth(depth+1);
+		return left > right ? left : right;
+    }
 }

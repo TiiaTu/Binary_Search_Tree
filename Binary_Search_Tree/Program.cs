@@ -4,21 +4,27 @@ using Binary_Search_Tree;
 
 BinarySearchTree<int> tree = new BinarySearchTree<int>();
 
-int[] values = { 7, 5, 9, 10, -1, 8, 2 };
+//int[] values = { 35, 50, 25, 27, 28, 20, 22 ,15, 17, 26 };
+int[] values = { 3,2,1};
 
 foreach (int num in values)
 {
     tree.Insert(num);
 }
 
-tree.Remove(2); // inga children
-tree.Remove(5); // en child
-tree.Remove(9); // två children
+//tree.Remove(2); // inga children
+//tree.Remove(5); // en child
+//tree.Remove(9); // två children
+
+//tree.Remove(25);
+//tree.Remove(25);
 
 tree.Print();
 tree.Count();
 
 Exists(9);
+
+Console.WriteLine(tree.GetMaxDepth());
 
 void Exists(int num)
 {

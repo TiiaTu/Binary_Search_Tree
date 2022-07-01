@@ -14,7 +14,7 @@ namespace Binary_Search_Tree
         /// Inserts a new value to the tree
         /// </summary>
         /// <param name="value">The value that is added to the tree.</param>
-        public void Insert(T value)
+        public void Insert(T value) //
         {
             if (Exists(value)) return; //ifall det blir dubletter
 
@@ -26,8 +26,10 @@ namespace Binary_Search_Tree
             else
             {
                 Root = InsertTo(Root, value);
+               
                 nodeCount++;
             }
+            Balance();
         }
 
         /// <summary>
@@ -38,7 +40,6 @@ namespace Binary_Search_Tree
         /// <returns></returns>
         private Node<T> InsertTo(Node<T> node, T value)
         {
-
             //om första noden är tom, skapa en ny node
             if (node == null)
             {
@@ -46,21 +47,20 @@ namespace Binary_Search_Tree
             }
             else if (node.Data.CompareTo(value) > 0)
             {
-                node.LeftChild = InsertTo(node.LeftChild, value);
+                node.LeftChild = InsertTo(node.LeftChild, value); 
             }
             else if (node.Data.CompareTo(value) < 0)
             {
-                node.RightChild = InsertTo(node.RightChild, value);
+                node.RightChild = InsertTo(node.RightChild, value); 
             }
             else //node.Data.CompareTo(value) == 0
             {
                 CheckChildren(node);
-
             }
-
             return node;
         }
 
+        
         //help method for the InsertDirection
         private Node<T> CheckChildren(Node<T> node)
         {
@@ -70,7 +70,7 @@ namespace Binary_Search_Tree
             else node = node.RightChild;
 
             return node;
-        } //TODO: gör bättre
+        } 
 
         /// <summary>
         /// Returns true if an object that is equal to value exists in the tree
@@ -98,7 +98,6 @@ namespace Binary_Search_Tree
                 {
                     node = node.RightChild;
                 }
-
             }
             return false;
         }
@@ -116,8 +115,6 @@ namespace Binary_Search_Tree
             Console.WriteLine($"The tree has {nodeCount} elements.");
             return nodeCount;
         }
-
-
 
         /// <summary>
         /// Prints the binary tree in console
@@ -173,7 +170,7 @@ namespace Binary_Search_Tree
 
         #region VG methods
 
-        // Remove a value from the tree
+        // Tar bort ett värde från trädet 
         public void Remove(T value)
         {
             if (Root == null)
@@ -188,6 +185,7 @@ namespace Binary_Search_Tree
             }
         }
 
+        //hjälpfunktionen för Remove(value)
         private Node<T> RemoveFrom(Node<T> node, T value)
         {
             if (node.Data.CompareTo(value) > 0)
@@ -214,6 +212,7 @@ namespace Binary_Search_Tree
                 }
 
                 // fall 3: har två children
+                // hämtar det hösta värdet i den vänstra subträdet
                 else
                 {
                     Node<T> temp = getMaxValue(node.LeftChild);
@@ -224,12 +223,12 @@ namespace Binary_Search_Tree
             return node;
         }
 
-        //hämtar det högsta värdet på trädet
+        //hämtar det högsta värdet på trädet/subträdet
         private Node<T> getMaxValue(Node<T> node)
         {
             while (node.RightChild != null)
-            { 
-                node = node.RightChild; 
+            {
+                node = node.RightChild;
             }
             return node;
         }
@@ -237,13 +236,48 @@ namespace Binary_Search_Tree
         // You need a method to balance the tree, whenever it is unbalanced. All methods that change the tree can cause it to become unbalanced.
         public void Balance()
         {
+            var node = Root;
+
+            // balance = left tree - right tree
+            // om left är längre --> negativt värde
+            // om right är längre --> positivt värde
+
+            int balance = node.GetBalance();
+            
+                if (balance < -1)
+                {
+                    //då ska man rotera till höger
+                }
+                else if (balance > 1)
+                {
+                    //då ska man rotera till vänster
+                }
+        }
+        
+        private Node<T> RotateLeft(Node<T> node)
+        {
+            Node<T> temp = node.RightChild;
+            node.RightChild = temp.LeftChild;
+            temp.LeftChild = node;
+            return temp;
+        }
+
+        private Node<T> RotateRight(Node<T> node)
+        {
+            Node<T> temp = node.LeftChild;
+            node.LeftChild = temp.RightChild;
+            temp.RightChild = node;
+            return temp;
 
         }
 
-        // Methods that you may find useful:
-        // private int GetMaxDepth()
-        // private int GetMinDepth()
-
-        #endregion
+        //hjälpmetod för att få fram balansen av trädet (höjden mellan vänstra och högra subträdet)
+        public int GetMaxDepth()
+        {
+            int balance = Root.GetBalance();
+            return balance;
+        }
+            #endregion
+        
     }
 }
