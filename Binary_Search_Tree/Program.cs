@@ -4,8 +4,8 @@ using Binary_Search_Tree;
 
 BinarySearchTree<int> tree = new BinarySearchTree<int>();
 
-//int[] values = { 35, 50, 25, 27, 28, 20, 22 ,15, 17, 26 };
-int[] values = { 3,2,1};
+int[] values = { 35, 50, 25, 27, 28, 20, 22, 15, 17, 26 };
+//int[] values = { 3,2,1};
 
 foreach (int num in values)
 {
