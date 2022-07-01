@@ -14,7 +14,7 @@ namespace Binary_Search_Tree
         /// Inserts a new value to the tree
         /// </summary>
         /// <param name="value">The value that is added to the tree.</param>
-        public void Insert(T value) //
+        public void Insert(T value)
         {
             if (Exists(value)) return; //ifall det blir dubletter
 
@@ -40,7 +40,6 @@ namespace Binary_Search_Tree
         /// <returns></returns>
         private Node<T> InsertTo(Node<T> node, T value)
         {
-            //om första noden är tom, skapa en ny node
             if (node == null)
             {
                 node = new Node<T>(value);
@@ -49,29 +48,13 @@ namespace Binary_Search_Tree
             {
                 node.LeftChild = InsertTo(node.LeftChild, value); 
             }
-            else if (node.Data.CompareTo(value) < 0)
+            else // (node.Data.CompareTo(value) < 0)
             {
                 node.RightChild = InsertTo(node.RightChild, value); 
             }
-            else //node.Data.CompareTo(value) == 0
-            {
-                CheckChildren(node);
-            }
             return node;
         }
-
         
-        //help method for the InsertDirection
-        private Node<T> CheckChildren(Node<T> node)
-        {
-            //om leftchild är null --> lägg värdet dit
-            //om right är null --> lägg till värdet dit
-            if (node.LeftChild == null) node = node.LeftChild;
-            else node = node.RightChild;
-
-            return node;
-        } 
-
         /// <summary>
         /// Returns true if an object that is equal to value exists in the tree
         /// </summary>
@@ -170,7 +153,10 @@ namespace Binary_Search_Tree
 
         #region VG methods
 
-        // Tar bort ett värde från trädet 
+        /// <summary>
+        /// Removes a value from the tree
+        /// </summary>
+        /// <param name="value">The value that we want to remove.</param>
         public void Remove(T value)
         {
             if (Root == null)
@@ -215,7 +201,7 @@ namespace Binary_Search_Tree
                 // hämtar det hösta värdet i den vänstra subträdet
                 else
                 {
-                    Node<T> temp = getMaxValue(node.LeftChild);
+                    Node<T> temp = GetMaxValue(node.LeftChild);
                     node.Data = temp.Data;
                     node.LeftChild = RemoveFrom(node.LeftChild, temp.Data);
                 }
@@ -223,8 +209,12 @@ namespace Binary_Search_Tree
             return node;
         }
 
-        //hämtar det högsta värdet på trädet/subträdet
-        private Node<T> getMaxValue(Node<T> node)
+        /// <summary>
+        /// Returns the highest value in the left subtree.
+        /// </summary>
+        /// <param name="node">The current node</param>
+        /// <returns></returns>
+        private Node<T> GetMaxValue(Node<T> node)
         {
             while (node.RightChild != null)
             {
@@ -252,8 +242,15 @@ namespace Binary_Search_Tree
                 {
                     //då ska man rotera till vänster
                 }
+                
+                //??
         }
         
+        /// <summary>
+        /// Rotates the tree to the left
+        /// </summary>
+        /// <param name="node">The current root before </param>
+        /// <returns></returns>
         private Node<T> RotateLeft(Node<T> node)
         {
             Node<T> temp = node.RightChild;
@@ -262,6 +259,7 @@ namespace Binary_Search_Tree
             return temp;
         }
 
+        // same as RotateLeft but rotates to the right
         private Node<T> RotateRight(Node<T> node)
         {
             Node<T> temp = node.LeftChild;
@@ -270,14 +268,15 @@ namespace Binary_Search_Tree
             return temp;
 
         }
-
-        //hjälpmetod för att få fram balansen av trädet (höjden mellan vänstra och högra subträdet)
+        /// <summary>
+        /// Gets the maximum depth of borth sides of the tree and returns the balance
+        /// </summary>
+        /// <returns>the balance of the tree</returns>
         public int GetMaxDepth()
         {
             int balance = Root.GetBalance();
             return balance;
         }
             #endregion
-        
     }
 }
