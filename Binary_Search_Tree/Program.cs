@@ -16,7 +16,7 @@ foreach (int num in values)
 //tree.Remove(5); // en child
 //tree.Remove(9); // två children
 
-//tree.Remove(25);
+tree.Remove(25);
 //tree.Remove(25);
 
 tree.Print();
@@ -24,7 +24,7 @@ tree.Count();
 
 Exists(9);
 
-Console.WriteLine(tree.GetMaxDepth());
+Console.WriteLine("The depth difference in the tree: " + tree.GetMaxDepth());
 
 void Exists(int num)
 {
